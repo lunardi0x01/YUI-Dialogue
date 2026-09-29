@@ -10,12 +10,18 @@
 # Rows 1408-2048 (dividers, close button, icons): copied from the Metal kit,
 #   which is already drawn for a dark page.
 #
-# The page interior is made fully opaque (the Dark theme's is 85%): the bottom
-# strip is drawn over the text to hide it as it scrolls, and the two page pieces
-# overlap, so translucency would show ghosted text and a darker seam.
+# OPACITY sets the page interior's opacity in percent (default 85, the same as
+# the Dark theme dialogue, which lets a little of the world show through).
+#   OPACITY=100 _Dev/make-dark-book-texture.sh
+# At 100 the bottom strip fades in over the page piece where they overlap, so
+# scrolling text fades out under it. Below 100 two translucent layers there would
+# show as a darker band, so the strip leaves the overlap to the page piece alone,
+# and text scrolling under the strip stays faintly visible.
 #
 # Requires ImageMagick 7. Run from anywhere: _Dev/make-dark-book-texture.sh
 set -euo pipefail
+
+OPACITY=${OPACITY:-85}
 
 cd "$(dirname "$0")/.."
 tmp=$(mktemp -d)
@@ -28,16 +34,22 @@ out=Art/Book/TextureKit-DarkParchment.png
 # Dark page body is 777x905 at +124+125; the Book parchment body is 771x899 at +126+127.
 magick "$dark" -crop 1024x1152+0+0 +repage \
     -resize "$((1024 * 771 / 777))x$((1152 * 899 / 905))!" \
-    -channel A -level 0,85% +channel \
+    -channel A -level 0,85% -evaluate multiply "$(awk "BEGIN { print $OPACITY / 100 }")" +channel \
     -background none -gravity northwest -extent 1024x1152-3-3 \
     +repage PNG32:"$tmp/page.png"
 
-# In game the page piece overlaps the strip's top 40 rows. There, the strip's
-# opaque page fades in over 38 rows (matching the stock strip, so text scrolling
-# under it fades out), and its shadow is dropped so it doesn't double up with the
-# page piece's shadow into a dark line either side of the page.
+# In game the page piece overlaps the strip's top 40 rows. The strip's shadow is
+# always dropped there so it doesn't double up with the page piece's shadow into a
+# dark line either side of the page. An opaque page also fades in over 38 rows
+# (matching the stock strip, so text scrolling under it fades out); a translucent
+# one is dropped there too, or the double layer would show as a darker band.
+if (( OPACITY >= 100 )); then
+    strip_alpha='u.a >= 0.99 ? u.a * min(1, j / 38) : (j >= 40 ? u.a : 0)'
+else
+    strip_alpha='j >= 40 ? u.a : 0'
+fi
 magick "$tmp/page.png" -crop 1024x256+0+896 +repage \
-    -channel A -fx 'u.a >= 0.99 ? u.a * min(1, j / 38) : (j >= 40 ? u.a : 0)' +channel \
+    -channel A -fx "$strip_alpha" +channel \
     PNG32:"$tmp/strip.png"
 
 magick "$metal" -crop 1024x640+0+1408 +repage PNG32:"$tmp/ui.png"
