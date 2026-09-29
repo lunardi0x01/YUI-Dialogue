@@ -753,7 +753,7 @@ function DUIDialogBaseMixin:UseQuestLayout(state)
         self.hasActiveGossipQuests = false;
         self.activeQuestButtons = {};
 
-        if questID and API.IsQuestFlaggedCompletedOnAccount(questID) then
+        if questID and (not GetDBBool("HideWarbandCompletedIcon")) and API.IsQuestFlaggedCompletedOnAccount(questID) then
             self.WarbandCompleteAlert:Show();
             self.FrontFrame.Header.Title:SetPoint("RIGHT", self.FrontFrame.Header, "RIGHT", -56, 2);
             CallbackRegistry:TriggerOnNextUpdate("WarbandCompleteAlert.Show", self.FrontFrame.Header, self.WarbandCompleteAlert);
