@@ -23,6 +23,7 @@ local DefaultValues = {
         ShowChatWindow = true,
         HideOutlineSparkles = true,
         HideUnitNames = false,
+        HideExperienceBar = false,
     ShowCopyTextButton = false,
     ShowNPCNameOnPage = false,
     MarkHighestSellPrice = false,
