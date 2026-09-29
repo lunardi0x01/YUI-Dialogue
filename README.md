@@ -2,20 +2,21 @@
 
 A personal fork of [Peterodox/YUI-Dialogue](https://github.com/Peterodox/YUI-Dialogue)
 (the **Dialogue UI** World of Warcraft addon). It is the upstream addon unchanged,
-plus three extra toggles in its settings panel.
+plus three extra toggles in its settings panel and a dark look for readables.
 
 ## What this fork adds
 
-All three options are **off by default**, so with nothing ticked the addon behaves
-exactly like upstream.
+The three options are **off by default**. The only change you'll see without ticking
+anything is the dark readables, and only with the Dark theme selected.
 
 | Option | Where in settings | What it does |
 |---|---|---|
 | **Hide XP Bar** | UI → under *Hide UI* | Hides the full-width XP bar DialogueUI draws at the bottom of the screen while the game UI is hidden. Only available while *Hide UI* is on. |
 | **Hide Keybind Labels** | UI | Removes the key badges (Space, Esc, gamepad buttons) from dialogue buttons, and the `1.` `2.` `3.` prefixes on gossip options. The keys still work; only the labels go away. |
 | **Hide Warband Completed Icon** | UI → Quest | Hides the check mark shown on quests another character on your account has already completed. It is removed from both the quest header and the NPC's quest list. |
+| **Dark readables** (no toggle) | Follows *Theme* | With the Dark theme selected, parchment books and letters open on a dark parchment page instead of the light one. Stone and metal readables already had a dark look and are unchanged. |
 
-Each option is a single commit on the `tweaks` branch, so `git log` shows exactly
+Each change is a single commit on the `tweaks` branch, so `git log` shows exactly
 what differs from upstream.
 
 ## Why a fork instead of contributing upstream
@@ -109,4 +110,4 @@ None of these are copied into the game folder.
 ---
 
 All addon code and assets belong to Peterodox and the upstream contributors. This
-fork only adds the three options above.
+fork only adds the changes listed above.

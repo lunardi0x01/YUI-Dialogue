@@ -554,7 +554,17 @@ do  --Background Calculation \ Theme
     local TextureKit = {
         [1] = {file = "Parchment.png", textColor = {0.19, 0.17, 0.13}, pageSelectedColor = "Ivory", pageNormalColor = "LightBrown", shadow = false, widgetTheme = 3},
         [2] = {file = "Metal.png", textColor = {0.8, 0.8, 0.8}, pageSelectedColor = "DarkModeGrey90", pageNormalColor = "DarkModeGrey70", shadow = true, widgetTheme = 4},
+        [3] = {file = "DarkParchment.png", textColor = {0.8, 0.8, 0.8}, pageSelectedColor = "DarkModeGrey90", pageNormalColor = "DarkModeGrey70", shadow = true, widgetTheme = 4},  --Parchment under the Dark theme
     };
+
+    function DUIBookUIMixin:GetThemedTextureKitID(textureKitID, themeID)
+        --Parchment follows the UI theme; Stone/Metal materials are already dark
+        themeID = themeID or addon.GetDBValue("Theme");
+        if textureKitID == 1 and themeID == 2 then
+            return 3
+        end
+        return textureKitID
+    end
 
     function DUIBookUIMixin:SetTextureKit(textureKitID)
         if textureKitID and TextureKit[textureKitID] and textureKitID ~= self.textureKitID then
@@ -1889,7 +1899,8 @@ do  --EventListener
             local material = ItemTextGetMaterial() or "Parchment";
             --material = "Stone"; --debug  Parchment Stone
             local textureKitID = MaterialTextureKitID[material] or 1;
-            MainFrame:SetTextureKit(textureKitID);
+            MainFrame.materialTextureKitID = textureKitID;
+            MainFrame:SetTextureKit(MainFrame:GetThemedTextureKitID(textureKitID));
 
             --if QuestUtil.QuestTextContrastUseLightText() then
 
@@ -2061,6 +2072,13 @@ do  --Settings
         MainFrame.ScreenVignette:SetShown(state);
     end
     CallbackRegistry:Register("SettingChanged.BookDarkenScreen", Settings_BookDarkenScreen);
+
+    local function Settings_Theme(themeID)
+        if MainFrame.materialTextureKitID then
+            MainFrame:SetTextureKit(MainFrame:GetThemedTextureKitID(MainFrame.materialTextureKitID, themeID));
+        end
+    end
+    CallbackRegistry:Register("SettingChanged.Theme", Settings_Theme);
 
     local function Settings_BookShowLocation(state)
         if MainFrame:IsShown() then
