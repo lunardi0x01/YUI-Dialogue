@@ -3319,7 +3319,7 @@ do  --GamePad/Controller
         local hotkey = button.HotkeyFrame;
         if not hotkey then return end;
 
-        if highlightedButtonSelected then
+        if highlightedButtonSelected and not GetDBBool("HideHotkeyLabels") then
             hotkey:Show();
             button.hasHotkey = true;
             button:Layout(true);
