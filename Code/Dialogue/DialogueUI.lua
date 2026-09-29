@@ -3568,9 +3568,10 @@ do  --Generic Settings Registry
     CallbackRegistry:Register("SettingChanged.FrameSize", Settings_FrameSize);
 
     local function Settings_HideUI(dbValue, useInput)
-        ExperienceBar:SetShown(dbValue == true);
+        ExperienceBar:SetShown(GetDBBool("HideUI") and not GetDBBool("HideExperienceBar"));
     end
     CallbackRegistry:Register("SettingChanged.HideUI", Settings_HideUI);
+    CallbackRegistry:Register("SettingChanged.HideExperienceBar", Settings_HideUI);
 
     local function Settings_UseRoleplayName(dbValue)
         if dbValue == true then
