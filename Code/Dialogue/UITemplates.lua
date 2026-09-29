@@ -15,6 +15,7 @@ local IsCtrlDown = addon.DeviceUtil.IsCtrlDown;
 -- User Settings
 local SHOW_QUEST_TYPE_TEXT = true;
 local INPUT_DEVICE_GAME_PAD = false;
+local HIDE_HOTKEY_LABELS = false;
 ------------------
 
 local BUTTON_TEXT_SPACING = 4;      --Font Size * 0.35
@@ -390,7 +391,7 @@ function DUIDialogOptionButtonMixin:SetGossip(data, hotkey)
     self.onClickFunc = OnClickFunc_SelectOption;
 
     self:SetHotkey(false);  --Put Key in name (1. Options 1)
-    if hotkey then
+    if hotkey and not HIDE_HOTKEY_LABELS then
         name = hotkey..". "..name;
     end
 
@@ -415,7 +416,7 @@ function DUIDialogOptionButtonMixin:SetGossipHint(data, hotkey)
     self.onClickFunc = OnClickFunc_SelectHint;
 
     self:SetHotkey(false);  --Put Key in name (1. Options 1)
-    if hotkey then
+    if hotkey and not HIDE_HOTKEY_LABELS then
         name = hotkey..". "..name;
     end
 
@@ -950,7 +951,7 @@ do  --Extra Icons On OptionButton
 end
 
 function DUIDialogOptionButtonMixin:SetHotkey(hotkey)
-    if hotkey then
+    if hotkey and not HIDE_HOTKEY_LABELS then
         local hotkeyFrame = self.HotkeyFrame or addon.DialogueUI.hotkeyFramePool:Acquire();
 
         self.HotkeyFrame = hotkeyFrame;
@@ -2811,6 +2812,12 @@ do  --Settings, CallbackRegistry
     end
 
     CallbackRegistry:Register("SettingChanged.QuestTypeText", Settings_QuestTypeText);
+
+    local function Settings_HideHotkeyLabels(dbValue)
+        HIDE_HOTKEY_LABELS = dbValue == true;
+        addon.DialogueUI:OnSettingsChanged();
+    end
+    CallbackRegistry:Register("SettingChanged.HideHotkeyLabels", Settings_HideHotkeyLabels);
 
 
     local function Settings_InputDevice(dbValue)

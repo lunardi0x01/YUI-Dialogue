@@ -26,6 +26,7 @@ local DefaultValues = {
         HideExperienceBar = false,
     ShowCopyTextButton = false,
     ShowNPCNameOnPage = false,
+    HideHotkeyLabels = false,
     MarkHighestSellPrice = false,
     QuestTypeText = false,
     SimplifyCurrencyReward = false,

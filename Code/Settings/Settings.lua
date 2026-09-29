@@ -608,6 +608,7 @@ local Schematic = { --Scheme
             {type = "Checkbox", name = L["Hide Experience Bar"], description = L["Hide Experience Bar Desc"], dbKey = "HideExperienceBar", requiredParentValueAnd = {HideUI = true}},
             {type = "Checkbox", name = L["Show Copy Text Button"], description = L["Show Copy Text Button Desc"], preview = "CopyTextButton", ratio = 1, dbKey = "ShowCopyTextButton"},
             {type = "Checkbox", name = L["Show NPC Name On Page"], description = L["Show NPC Name On Page Desc"], dbKey = "ShowNPCNameOnPage"},
+            {type = "Checkbox", name = L["Hide Hotkey Labels"], description = L["Hide Hotkey Labels Desc"], dbKey = "HideHotkeyLabels"},
 
             {type = "Subheader", name = L["Quest"]},    --Quest
             {type = "Checkbox", name = L["Mark Highest Sell Price"], description = L["Mark Highest Sell Price Desc"], dbKey = "MarkHighestSellPrice", preview = "MarkHighestSellPrice", ratio = 1},
